@@ -1,2 +1,8 @@
+bin/
+obj/
+judy/
+
+*.suo
+*.csproj.user
 
 *.ncb
