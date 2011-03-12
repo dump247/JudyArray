@@ -1,5 +1,7 @@
 This is a managed wrapper around the native Judy array library. To find out more about Judy arrays, see http://judy.sourceforge.net.
 
+See Downloads in GitHub for pre-built libraries for x86 and x64.
+
 To build the project:
 1. Download the Judy array source. The latest version as of this writing was 1.0.5.
 2. Extract the Judy array source to the solution directory (e.g. $(SolutionDir)\judy-1.0.5).
