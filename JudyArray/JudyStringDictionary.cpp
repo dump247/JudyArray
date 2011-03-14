@@ -245,7 +245,7 @@ bool JudyHybridArrayEnumerator<TValue>::MoveNext()
 		{
 			_state = 1;
 			
-			String^ key = Encoding::UTF8->GetString(_buffer, 0, strlen((const char*)bufferPin));
+			String^ key = Encoding::UTF8->GetString(_buffer, 0, (int)strlen((const char*)bufferPin));
 			TValue value = _judyArray->GetValue((PWord_t)valuePtr);
 			_current = KeyValuePair<String^, TValue>(key, value);
 		}
@@ -260,7 +260,7 @@ bool JudyHybridArrayEnumerator<TValue>::MoveNext()
 		}
 		else
 		{
-			String^ key = Encoding::UTF8->GetString(_buffer, 0, strlen((const char*)bufferPin));
+			String^ key = Encoding::UTF8->GetString(_buffer, 0, (int)strlen((const char*)bufferPin));
 			TValue value = _judyArray->GetValue((PWord_t)valuePtr);
 			_current = KeyValuePair<String^, TValue>(key, value);
 		}
