@@ -32,6 +32,10 @@ namespace JudyArray {
   {
   private:
 
+    /// <summary>
+    /// Pointer to the native judy array or <see cref="System::IntPtr::Zero"/>
+    /// if the array is empty.
+    /// </summary>
     void* _judyArrayPtr;
 
   public:
