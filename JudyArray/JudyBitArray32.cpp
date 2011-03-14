@@ -31,15 +31,15 @@ JudyBitArray32::JudyBitArray32()
 
 JudyBitArray32::~JudyBitArray32()
 {
-		if (_judyArrayPtr != NULL)
-		{
-			Word_t bytes;
-			Pvoid_t judyArrayPtr = _judyArrayPtr;
-
-			J1FA(bytes, judyArrayPtr);
-
-			_judyArrayPtr = NULL;
-		}
+  if (_judyArrayPtr != NULL)
+  {
+    Word_t bytes;
+    Pvoid_t judyArrayPtr = _judyArrayPtr;
+    
+    J1FA(bytes, judyArrayPtr);
+    
+    _judyArrayPtr = NULL;
+  }
 }
 
 void JudyBitArray32::Set(unsigned int index, bool value)
