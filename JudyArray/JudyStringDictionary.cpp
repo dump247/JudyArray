@@ -259,7 +259,7 @@ JudyStringDictionary<TValue>::JudyStringDictionary()
 		 valueType->Equals(UInt32::typeid) ||
 		 valueType->Equals(Int32::typeid) ||
 		 valueType->Equals(Single::typeid)
-#ifdef WIN64
+#ifdef _WIN64
 		 || valueType->Equals(Double::typeid)
 		 || valueType->Equals(Int64::typeid)
 		 || valueType->Equals(UInt64::typeid)
