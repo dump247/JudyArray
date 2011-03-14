@@ -22,14 +22,13 @@
 #include <Judy.h>
 #include <string.h>
 #include <vcclr.h>
+#include <vector>
 
 using namespace JudyArray;
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::Text;
 using namespace System::Runtime::InteropServices;
-
-#define MAXLINE 1024
 
 struct KeyBytes
 {
@@ -95,8 +94,9 @@ ref class JudyHybridArray : IEnumerable<KeyValuePair<String^, TValue>>
 public:
 	Pvoid_t _judyArrayPtr;
 	int _enumeratorVersion;
+	int _maxValueLength;
 
-	JudyHybridArray() : _judyArrayPtr(NULL)
+	JudyHybridArray() : _judyArrayPtr(NULL), _enumeratorVersion(0), _maxValueLength(0)
 	{ 
 	}
 
@@ -121,6 +121,7 @@ public:
 		if (_judyArrayPtr != NULL)
 		{
 			_enumeratorVersion += 1;
+			_maxValueLength = 0;
 
 			Word_t Bytes;
 			Pvoid_t PJArray = _judyArrayPtr;
@@ -146,6 +147,7 @@ public:
 		}
 
 		_enumeratorVersion += 1;
+		_maxValueLength = Math::Max(_maxValueLength, keyBytes.Length);
 		Set((PWord_t)valuePtr, value);
 	}
 
@@ -203,7 +205,7 @@ protected:
 
 generic<typename TValue>
 JudyHybridArrayEnumerator<TValue>::JudyHybridArrayEnumerator(JudyHybridArray<TValue>^ judyArray)
-	: _judyArray(judyArray), _version(judyArray->_enumeratorVersion), _state(0), _buffer(gcnew cli::array<unsigned char>(MAXLINE))
+	: _judyArray(judyArray), _version(judyArray->_enumeratorVersion), _state(0), _buffer(gcnew cli::array<unsigned char>(judyArray->_maxValueLength + 1))
 {
 }
 
@@ -331,16 +333,16 @@ public:
 protected:
 	virtual void Dispose(Pvoid_t judyArrayPtr) override
 	{
-		uint8_t index[MAXLINE];
+		std::vector<uint8_t> index(_maxValueLength + 1);
 		Pvoid_t valuePtr = NULL;
 
 		index[0] = '\0';
-		JSLF(valuePtr, judyArrayPtr, index);
+		JSLF(valuePtr, judyArrayPtr, &index[0]);
 
 		while (valuePtr != NULL)
 		{
 			Free((PWord_t)valuePtr);
-			JSLN(valuePtr, judyArrayPtr, index);
+			JSLN(valuePtr, judyArrayPtr, &index[0]);
 		}
 	}
 
