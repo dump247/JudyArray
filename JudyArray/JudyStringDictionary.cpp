@@ -22,7 +22,6 @@
 #include <Judy.h>
 #include <string.h>
 #include <vcclr.h>
-#include <vector>
 
 using namespace JudyArray;
 using namespace System;
@@ -338,17 +337,19 @@ public:
 protected:
 	virtual void Dispose(Pvoid_t judyArrayPtr) override
 	{
-		std::vector<uint8_t> index(_maxValueLength + 1);
+		uint8_t* index = new uint8_t[_maxValueLength + 1];
 		Pvoid_t valuePtr = NULL;
 
 		index[0] = '\0';
-		JSLF(valuePtr, judyArrayPtr, &index[0]);
+		JSLF(valuePtr, judyArrayPtr, index);
 
 		while (valuePtr != NULL)
 		{
 			Free((PWord_t)valuePtr);
-			JSLN(valuePtr, judyArrayPtr, &index[0]);
+			JSLN(valuePtr, judyArrayPtr, index);
 		}
+
+		delete [] index;
 	}
 
 	static void Free(PWord_t entry)
