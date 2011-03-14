@@ -120,14 +120,14 @@ public:
 	{
 		if (_judyArrayPtr != NULL)
 		{
-			_enumeratorVersion += 1;
-			_maxValueLength = 0;
-
 			Word_t Bytes;
 			Pvoid_t PJArray = _judyArrayPtr;
 			Dispose(PJArray);
 			JSLFA(Bytes, PJArray);
+
 			_judyArrayPtr = NULL;
+			_enumeratorVersion += 1;
+			_maxValueLength = 0;
 		}
 	}
 
@@ -161,7 +161,12 @@ public:
 		_judyArrayPtr = judyArrayPtr;
 
 		if (rc != 0)
+		{
 			_enumeratorVersion += 1;
+
+			if (_judyArrayPtr == NULL)
+				_maxValueLength = 0;
+		}
 
 		return rc != 0;
 	}
