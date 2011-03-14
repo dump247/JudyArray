@@ -18,6 +18,56 @@ namespace JudyArray_Test
         }
 
         [Test]
+        public void Enumerator()
+        {
+            JudyStringDictionary<int> dic = new JudyStringDictionary<int>();
+
+            Assert.AreEqual(0, dic.Count());
+
+            dic["key"] = 17;
+
+            CollectionAssert.AreEqual(new[] {
+                new KeyValuePair<string,int>("key", 17)
+            }, dic.ToArray());
+
+            dic["key2"] = 11;
+
+            CollectionAssert.AreEqual(new[] {
+                new KeyValuePair<string,int>("key", 17),
+                new KeyValuePair<string,int>("key2", 11)
+            }, dic.ToArray());
+
+            dic["akey"] = 22;
+
+            CollectionAssert.AreEqual(new[] {
+                new KeyValuePair<string,int>("akey", 22),
+                new KeyValuePair<string,int>("key", 17),
+                new KeyValuePair<string,int>("key2", 11)
+            }, dic.ToArray());
+
+            dic.Dispose();
+        }
+
+        [Test]
+        public void Enumerator__Errors()
+        {
+            JudyStringDictionary<int> dic = new JudyStringDictionary<int>();
+            IEnumerator<KeyValuePair<string, int>> dicEnum = dic.GetEnumerator();
+
+            // MoveNext must be called
+            Assert.Throws<InvalidOperationException>(() => { var x = dicEnum.Current; });
+
+            // Only one enumerator at a time allowed
+            var dicEnum2 = dic.GetEnumerator();
+            Assert.Throws<InvalidOperationException>(() => dicEnum.MoveNext());
+
+            // Modification invalidates enumerator
+            dicEnum = dic.GetEnumerator();
+            dic["key"] = 10;
+            Assert.Throws<InvalidOperationException>(() => dicEnum.MoveNext());
+        }
+
+        [Test]
         public void ContainsKey()
         {
             JudyStringDictionary<int> dic = new JudyStringDictionary<int>();
@@ -27,6 +77,8 @@ namespace JudyArray_Test
             Assert.IsTrue(dic.ContainsKey("key"));
 
             Assert.IsFalse(dic.ContainsKey("key1"));
+
+            dic.Dispose();
         }
 
         [Test]
@@ -41,6 +93,8 @@ namespace JudyArray_Test
 
             dic.Clear();
             Assert.IsFalse(dic.ContainsKey("key"));
+
+            dic.Dispose();
         }
 
         [Test]
@@ -196,6 +250,8 @@ namespace JudyArray_Test
             dic.Remove("key1");
             GC.Collect();
             Assert.IsNull(weakValue.Target);
+
+            dic.Dispose();
         }
     }
 }

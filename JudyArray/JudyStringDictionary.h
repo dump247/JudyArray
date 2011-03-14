@@ -31,7 +31,7 @@ namespace JudyArray {
 	/// </summary>
 	/// <typeparam name="TValue">Type of the dictionary value.</typeparam>
 	generic<typename TValue>
-	public ref class JudyStringDictionary
+	public ref class JudyStringDictionary : System::Collections::Generic::IEnumerable<System::Collections::Generic::KeyValuePair<System::String^, TValue>>
 	{
 	private:
 
@@ -85,5 +85,12 @@ namespace JudyArray {
 		/// Remove all items from the dictionary.
 		/// </summary>
 		void Clear();
+
+		virtual System::Collections::Generic::IEnumerator<System::Collections::Generic::KeyValuePair<System::String^, TValue>>^ GetEnumerator();
+
+		virtual System::Collections::IEnumerator^ EnumerableGetEnumerator() = System::Collections::IEnumerable::GetEnumerator
+		{
+			return GetEnumerator();
+		}
 	};
 }

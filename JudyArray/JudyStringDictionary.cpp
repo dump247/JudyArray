@@ -29,6 +29,8 @@ using namespace System::Collections::Generic;
 using namespace System::Text;
 using namespace System::Runtime::InteropServices;
 
+#define MAXLINE 1024
+
 struct KeyBytes
 {
 	unsigned char* Value;
@@ -60,12 +62,40 @@ namespace JudyArray
 {
 
 generic<typename TValue>
-ref class JudyHybridArray
+ref class JudyHybridArrayEnumerator : IEnumerator<KeyValuePair<String^, TValue>>
 {
-protected:
-	Pvoid_t _judyArrayPtr;
+private:
+	JudyHybridArray<TValue>^ _judyArray;
+	int _version;
+	int _state;
+	KeyValuePair<String^, TValue> _current;
+	cli::array<unsigned char>^ _buffer;
 
 public:
+	JudyHybridArrayEnumerator(JudyHybridArray<TValue>^ judyArray);
+	~JudyHybridArrayEnumerator() {}
+
+	virtual bool MoveNext();
+	virtual void Reset();
+
+	virtual property KeyValuePair<String^, TValue> Current
+	{
+		KeyValuePair<String^, TValue> get();
+	}
+
+	virtual property Object^ CurrentObject
+	{
+		Object^ get() = System::Collections::IEnumerator::Current::get { return Current; }
+	}
+};
+
+generic<typename TValue>
+ref class JudyHybridArray : IEnumerable<KeyValuePair<String^, TValue>>
+{
+public:
+	Pvoid_t _judyArrayPtr;
+	int _enumeratorVersion;
+
 	JudyHybridArray() : _judyArrayPtr(NULL)
 	{ 
 	}
@@ -90,6 +120,8 @@ public:
 	{
 		if (_judyArrayPtr != NULL)
 		{
+			_enumeratorVersion += 1;
+
 			Word_t Bytes;
 			Pvoid_t PJArray = _judyArrayPtr;
 			Dispose(PJArray);
@@ -113,6 +145,7 @@ public:
 			throw gcnew Exception("Error adding key.");
 		}
 
+		_enumeratorVersion += 1;
 		Set((PWord_t)valuePtr, value);
 	}
 
@@ -124,6 +157,9 @@ public:
 		int rc;
 		JSLD(rc, judyArrayPtr, keyBytes.Value);
 		_judyArrayPtr = judyArrayPtr;
+
+		if (rc != 0)
+			_enumeratorVersion += 1;
 
 		return rc != 0;
 	}
@@ -146,26 +182,109 @@ public:
 		return true;
 	}
 
+	virtual System::Collections::Generic::IEnumerator<System::Collections::Generic::KeyValuePair<System::String^, TValue>>^ GetEnumerator()
+	{
+		// Invalidate any other enumerators
+		_enumeratorVersion += 1;
+		return gcnew JudyHybridArrayEnumerator<TValue>(this);
+	}
+
+	virtual System::Collections::IEnumerator^ EnumerableGetEnumerator() = System::Collections::IEnumerable::GetEnumerator
+	{
+		return GetEnumerator();
+	}
+
+	virtual TValue GetValue(PWord_t entry) { return TValue(); }
+
 protected:
 	virtual void Dispose(Pvoid_t judyArrayPtr) {}
 	virtual void Set(PWord_t entry, TValue value) {}
-	virtual TValue GetValue(PWord_t entry) { return (TValue)0; }
 };
+
+generic<typename TValue>
+JudyHybridArrayEnumerator<TValue>::JudyHybridArrayEnumerator(JudyHybridArray<TValue>^ judyArray)
+	: _judyArray(judyArray), _version(judyArray->_enumeratorVersion), _state(0), _buffer(gcnew cli::array<unsigned char>(MAXLINE))
+{
+}
+
+generic<typename TValue>
+KeyValuePair<String^, TValue> JudyHybridArrayEnumerator<TValue>::Current::get()
+{
+	if (_judyArray->_enumeratorVersion != _version) throw gcnew InvalidOperationException("Enumerator version.");
+	if (_state != 1) throw gcnew InvalidOperationException("Enumerator is not positioned.");
+
+	return _current;
+}
+
+generic<typename TValue>
+bool JudyHybridArrayEnumerator<TValue>::MoveNext()
+{
+	if (_judyArray->_enumeratorVersion != _version) throw gcnew InvalidOperationException("Enumerator version.");
+	if (_state == 2) return false;
+
+	Pvoid_t valuePtr = NULL;
+	Pvoid_t judyArrayPtr = _judyArray->_judyArrayPtr;
+	pin_ptr<unsigned char> bufferPin = &_buffer[0];
+
+	if (_state == 0)
+	{
+		_buffer[0] = 0;
+		JSLF(valuePtr, judyArrayPtr, (unsigned char*)bufferPin);
+
+		if (valuePtr == NULL)
+		{
+			_state = 2;
+		}
+		else
+		{
+			_state = 1;
+			
+			String^ key = Encoding::UTF8->GetString(_buffer, 0, strlen((const char*)bufferPin));
+			TValue value = _judyArray->GetValue((PWord_t)valuePtr);
+			_current = KeyValuePair<String^, TValue>(key, value);
+		}
+	}
+	else if (_state == 1)
+	{
+		JSLN(valuePtr, judyArrayPtr, (unsigned char*)bufferPin);
+
+		if (valuePtr == NULL)
+		{
+			_state = 2;
+		}
+		else
+		{
+			String^ key = Encoding::UTF8->GetString(_buffer, 0, strlen((const char*)bufferPin));
+			TValue value = _judyArray->GetValue((PWord_t)valuePtr);
+			_current = KeyValuePair<String^, TValue>(key, value);
+		}
+	}
+
+	return _state == 1;
+}
+
+generic<typename TValue>
+void JudyHybridArrayEnumerator<TValue>::Reset()
+{
+	if (_judyArray->_enumeratorVersion != _version) throw gcnew InvalidOperationException("Enumerator version.");
+	_state = 0;
+}
 
 generic<typename TValue>
 ref class PrimitiveJudyHybridArray : public JudyHybridArray<TValue>
 {
-protected:
-	virtual void Set(PWord_t entry, TValue value) override
-	{
-		memcpy(entry, &value, sizeof(TValue));
-	}
-
+public:
 	virtual TValue GetValue(PWord_t entry) override
 	{
 		TValue value;
 		memcpy(&value, entry, sizeof(TValue));
 		return value;
+	}
+
+protected:
+	virtual void Set(PWord_t entry, TValue value) override
+	{
+		memcpy(entry, &value, sizeof(TValue));
 	}
 };
 
@@ -192,22 +311,6 @@ public:
 
 		return valuePtr != NULL;
 	}
-
-protected:
-	virtual void Dispose(Pvoid_t judyArrayPtr) override
-	{
-		uint8_t index[1024];
-		Pvoid_t valuePtr = NULL;
-
-		index[0] = '\0';
-		JSLF(valuePtr, judyArrayPtr, index);
-
-		while (valuePtr != NULL)
-		{
-			Free((PWord_t)valuePtr);
-			JSLN(valuePtr, judyArrayPtr, index);
-		}
-	}
 	
 	virtual TValue GetValue(PWord_t entry) override
 	{
@@ -222,6 +325,22 @@ protected:
 			IntPtr objPtr = IntPtr((void*)value);
 			GCHandle objHandle = GCHandle::FromIntPtr(objPtr);
 			return (TValue)objHandle.Target;
+		}
+	}
+
+protected:
+	virtual void Dispose(Pvoid_t judyArrayPtr) override
+	{
+		uint8_t index[MAXLINE];
+		Pvoid_t valuePtr = NULL;
+
+		index[0] = '\0';
+		JSLF(valuePtr, judyArrayPtr, index);
+
+		while (valuePtr != NULL)
+		{
+			Free((PWord_t)valuePtr);
+			JSLN(valuePtr, judyArrayPtr, index);
 		}
 	}
 
@@ -336,4 +455,10 @@ void JudyStringDictionary<TValue>::default::set(String^ key, TValue value)
 {
 	if (key == nullptr) throw gcnew ArgumentNullException("key");
 	_judyArray->Set(key, value);
+}
+
+generic<typename TValue>
+IEnumerator<KeyValuePair<String^, TValue>>^ JudyStringDictionary<TValue>::GetEnumerator()
+{
+	return _judyArray->GetEnumerator();
 }
