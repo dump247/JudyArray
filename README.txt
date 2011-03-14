@@ -2,11 +2,12 @@ This is a managed wrapper around the native Judy array library. To find out more
 
 See Downloads in GitHub for pre-built libraries for x86 and x64.
 
-To build the project:
-1. Download the Judy array source. The latest version as of this writing was 1.0.5.
-2. Extract the Judy array source to the solution directory (e.g. $(SolutionDir)\judy-1.0.5).
-3. Rename the Judy source directory to 'judy' (e.g. $(SolutionDir)\judy).
-4. Modify the JUDY_SOURCE\src\build.bat to build a static library.
-   * Add /DPOCO_STATIC to COPT
-   * Comment out the DLL link step
-5. Build JudyArray.sln. Since Judy was linked as a static lib, there is no separate native judy dll. You only need to distribute JudyArray.dll.
+To build:
+1. Checkout the native Judy code at https://github.com/dump247/judy to $(SolutionDir)\judy and switch to the x64 branch
+2. Open a command prompt and cd to $(SolutionDir)\judy
+3. Execute vcvars.bat to setup the build environment
+	* For x86: VS_HOME\VC\bin\vcvars32.bat
+	* For x64: VS_HOME\VC\bin\amd64\vcvarsamd64.bat
+3. Run $(SolutionDir)\judy\src\static_build.bat to build Judy.lib
+4. Build JudyArray.sln Win32 or x64 to build the JudyArray assembly
+

@@ -46,7 +46,6 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\judy\src&quot;"
-				PreprocessorDefinitions="JU_WIN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				GenerateXMLDocumentationFiles="true"
@@ -121,7 +120,6 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\judy\src&quot;"
-				PreprocessorDefinitions="WIN64;JU_WIN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				GenerateXMLDocumentationFiles="true"
@@ -195,7 +193,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\judy\src&quot;"
-				PreprocessorDefinitions="JU_WIN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				GenerateXMLDocumentationFiles="true"
@@ -269,7 +266,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\judy\src&quot;"
-				PreprocessorDefinitions="WIN64;JU_WIN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				GenerateXMLDocumentationFiles="true"
