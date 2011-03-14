@@ -1,0 +1,3 @@
+[submodule "judy"]
+	path = judy
+	url = git://github.com/dump247/judy.git
