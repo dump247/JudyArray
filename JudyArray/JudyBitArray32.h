@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <Judy.h>
+
 namespace JudyArray {
 
   /// <summary>
@@ -28,7 +30,7 @@ namespace JudyArray {
   /// The bit array is unbounded, so any index between 0 and
   /// <see cref="System::UInt32::MaxValue"/> is valid.
   /// </remarks>
-  public ref class JudyBitArray32
+  public ref class JudyBitArray32 : System::Collections::Generic::IEnumerable<__int64>
   {
   private:
 
@@ -37,6 +39,12 @@ namespace JudyArray {
     /// if the array is empty.
     /// </summary>
     void* _judyArrayPtr;
+
+    /// <summary>
+    /// Version that is incremented each time the array is modified to invalidate
+    /// any existing enumerators.
+    /// </summary>
+    int _enumeratorVersion;
 
   public:
 
@@ -81,6 +89,41 @@ namespace JudyArray {
     /// Get the number of set bits in the bit array.
     /// </summary>
     virtual property __int64 Count { __int64 get(); };
+
+    virtual System::Collections::Generic::IEnumerator<__int64>^ GetEnumerator();
+
+		virtual System::Collections::IEnumerator^ EnumerableGetEnumerator() = System::Collections::IEnumerable::GetEnumerator
+		{
+			return GetEnumerator();
+		}
+
+  private:
+
+    ref class JudyBitArray32Enumerator : System::Collections::Generic::IEnumerator<__int64>
+    {
+    private:
+      JudyBitArray32^ _bitArray;
+      int _version;
+      int _state;
+      Word_t _currentIndex;
+
+    public:
+      JudyBitArray32Enumerator(JudyBitArray32^ bitArray);
+      virtual ~JudyBitArray32Enumerator();
+
+      virtual bool MoveNext();
+	    virtual void Reset();
+
+	    virtual property __int64 Current
+	    {
+		    __int64 get();
+	    }
+
+	    virtual property Object^ CurrentObject
+	    {
+		    Object^ get() = System::Collections::IEnumerator::Current::get { return Current; }
+	    }
+    };
   };
 
 }

@@ -23,9 +23,10 @@
 
 using namespace JudyArray;
 using namespace System;
+using namespace System::Collections::Generic;
 
 JudyBitArray32::JudyBitArray32()
-  : _judyArrayPtr(NULL)
+  : _judyArrayPtr(NULL), _enumeratorVersion(0)
 {
 }
 
@@ -38,6 +39,7 @@ JudyBitArray32::~JudyBitArray32()
     
     J1FA(bytes, judyArrayPtr);
     
+    _enumeratorVersion += 1;
     _judyArrayPtr = NULL;
   }
 }
@@ -55,6 +57,8 @@ void JudyBitArray32::Set(unsigned int index, bool value)
   {
     J1U(rc, judyArrayPtr, (Word_t)index);
   }
+
+  if (rc == 1) _enumeratorVersion += 1;
 
   _judyArrayPtr = judyArrayPtr;
 }
@@ -87,4 +91,70 @@ __int64 JudyBitArray32::Count::get()
   Pvoid_t judyArrayPtr = _judyArrayPtr;
   J1C(rc, judyArrayPtr, 0, -1);
   return (unsigned int)rc;
+}
+
+IEnumerator<__int64>^ JudyBitArray32::GetEnumerator()
+{
+  // Only one enumerator is allowed at a time
+  _enumeratorVersion += 1;
+  return gcnew JudyBitArray32Enumerator(this);
+}
+
+JudyBitArray32::JudyBitArray32Enumerator::JudyBitArray32Enumerator(JudyBitArray32^ bitArray)
+  : _bitArray(bitArray), _version(bitArray->_enumeratorVersion), _state(0), _currentIndex(0)
+{
+}
+
+JudyBitArray32::JudyBitArray32Enumerator::~JudyBitArray32Enumerator()
+{
+  _state = 3;
+}
+
+bool JudyBitArray32::JudyBitArray32Enumerator::MoveNext()
+{
+  if (_state == 3) throw gcnew ObjectDisposedException(this->ToString());
+  if (_version != _bitArray->_enumeratorVersion) throw gcnew InvalidOperationException("Collection has been modified.");
+
+  if (_state == 2) return false;
+
+  int rc;
+  Pvoid_t judyArrayPtr = _bitArray->_judyArrayPtr;
+  Word_t index = _currentIndex;
+
+  if (_state == 0)
+  {
+    J1F(rc, judyArrayPtr, index);
+  }
+  else
+  {
+    J1N(rc, judyArrayPtr, index);
+  }
+
+  if (rc == 0)
+  { 
+    _state = 2;
+  }
+  else
+  {
+    _state = 1;
+    _currentIndex = index;
+  }
+
+  return _state == 1;
+}
+
+void JudyBitArray32::JudyBitArray32Enumerator::Reset()
+{
+  if (_state == 3) throw gcnew ObjectDisposedException(this->ToString());
+  if (_version != _bitArray->_enumeratorVersion) throw gcnew InvalidOperationException("Collection has been modified.");
+
+  _state = 0;
+  _currentIndex = 0;
+}
+
+__int64 JudyBitArray32::JudyBitArray32Enumerator::Current::get()
+{
+  if (_state == 3) throw gcnew ObjectDisposedException(this->ToString());
+  if (_state != 1) throw gcnew InvalidOperationException("Enumerator is not positioned.");
+  return _currentIndex;
 }
