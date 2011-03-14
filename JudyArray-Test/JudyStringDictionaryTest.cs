@@ -18,6 +18,32 @@ namespace JudyArray_Test
         }
 
         [Test]
+        public void ContainsKey()
+        {
+            JudyStringDictionary<int> dic = new JudyStringDictionary<int>();
+
+            Assert.IsFalse(dic.ContainsKey("key"));
+            dic["key"] = 17;
+            Assert.IsTrue(dic.ContainsKey("key"));
+
+            Assert.IsFalse(dic.ContainsKey("key1"));
+        }
+
+        [Test]
+        public void Clear()
+        {
+            JudyStringDictionary<int> dic = new JudyStringDictionary<int>();
+
+            dic.Clear();
+
+            dic["key"] = 17;
+            Assert.AreEqual(17, dic["key"]);
+
+            dic.Clear();
+            Assert.IsFalse(dic.ContainsKey("key"));
+        }
+
+        [Test]
         public void Int32()
         {
             JudyStringDictionary<int> dic = new JudyStringDictionary<int>();

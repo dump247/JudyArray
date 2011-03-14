@@ -75,6 +75,17 @@ public:
 		Clear();
 	}
 
+	bool ContainsKey(String^ key)
+	{
+		KeyBytes keyBytes(key);
+		Pvoid_t judyArrayPtr = _judyArrayPtr;
+		Pvoid_t valuePtr = NULL;
+
+		JSLG(valuePtr, judyArrayPtr, keyBytes.Value);
+
+		return valuePtr != NULL;
+	}
+
 	void Clear()
 	{
 		if (_judyArrayPtr != NULL)
@@ -299,6 +310,12 @@ generic<typename TValue>
 void JudyStringDictionary<TValue>::Clear()
 {
 	_judyArray->Clear();
+}
+
+generic<typename TValue>
+bool JudyStringDictionary<TValue>::ContainsKey(String^ key)
+{
+	return _judyArray->ContainsKey(key);
 }
 
 generic<typename TValue>

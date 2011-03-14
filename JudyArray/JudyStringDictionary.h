@@ -64,6 +64,13 @@ namespace JudyArray {
 		bool TryGetValue(System::String^ key, [System::Runtime::InteropServices::Out] TValue% value);
 
 		/// <summary>
+		/// Test if the dictionary contains the specified key.
+		/// </summary>
+		/// <returns>True if the dictionary contains the key.</returns>
+		/// <exception cref="System::ArgumentNullException">If <paramref name="key"/> is a null reference.</exception>
+		bool ContainsKey(System::String^ key);
+
+		/// <summary>
 		/// Get or set the value for a given key.
 		/// </summary>
 		/// <exception cref="System::Collections::Generic::KeyNotFoundException">If the specified key is not found.</exception>
