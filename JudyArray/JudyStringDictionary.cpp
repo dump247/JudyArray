@@ -72,6 +72,11 @@ public:
 
 	virtual ~JudyHybridArray()
 	{
+		Clear();
+	}
+
+	void Clear()
+	{
 		if (_judyArrayPtr != NULL)
 		{
 			Word_t Bytes;
@@ -288,6 +293,12 @@ bool JudyStringDictionary<TValue>::TryGetValue(String^ key, [Out] TValue% value)
 {
 	if (key == nullptr) throw gcnew ArgumentNullException("key");
 	return _judyArray->TryGetValue(key, value);
+}
+
+generic<typename TValue>
+void JudyStringDictionary<TValue>::Clear()
+{
+	_judyArray->Clear();
 }
 
 generic<typename TValue>

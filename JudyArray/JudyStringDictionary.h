@@ -73,5 +73,10 @@ namespace JudyArray {
 			TValue get(System::String^ key);
 			void set(System::String^ key, TValue value);
 		}
+
+		/// <summary>
+		/// Remove all items from the dictionary.
+		/// </summary>
+		void Clear();
 	};
 }
