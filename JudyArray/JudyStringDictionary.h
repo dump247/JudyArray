@@ -19,8 +19,6 @@
 
 #pragma once
 
-using namespace System;
-
 namespace JudyArray {
 
 	generic<typename TValue>
