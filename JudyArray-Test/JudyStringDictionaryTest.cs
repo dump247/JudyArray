@@ -67,12 +67,12 @@ namespace JudyArray_Test
             Assert.IsFalse(dic.TryGetValue("key2", out value));
             Assert.AreEqual(0, value);
 
-            Assert.IsTrue(dic.RemoveKey("key1"));
+            Assert.IsTrue(dic.Remove("key1"));
 
             Assert.IsFalse(dic.TryGetValue("key1", out value));
             Assert.AreEqual(0, value);
 
-            Assert.IsFalse(dic.RemoveKey("key1"));
+            Assert.IsFalse(dic.Remove("key1"));
 
             dic.Dispose();
         }
@@ -101,12 +101,12 @@ namespace JudyArray_Test
             Assert.IsFalse(dic.TryGetValue("key2", out value));
             Assert.AreEqual(0, value);
 
-            Assert.IsTrue(dic.RemoveKey("key1"));
+            Assert.IsTrue(dic.Remove("key1"));
 
             Assert.IsFalse(dic.TryGetValue("key1", out value));
             Assert.AreEqual(0, value);
 
-            Assert.IsFalse(dic.RemoveKey("key1"));
+            Assert.IsFalse(dic.Remove("key1"));
 
             dic.Dispose();
         }
@@ -135,12 +135,12 @@ namespace JudyArray_Test
             Assert.IsFalse(dic.TryGetValue("key2", out value));
             Assert.AreEqual(0, value);
 
-            Assert.IsTrue(dic.RemoveKey("key1"));
+            Assert.IsTrue(dic.Remove("key1"));
 
             Assert.IsFalse(dic.TryGetValue("key1", out value));
             Assert.AreEqual(0, value);
 
-            Assert.IsFalse(dic.RemoveKey("key1"));
+            Assert.IsFalse(dic.Remove("key1"));
 
             dic.Dispose();
         }
@@ -167,12 +167,12 @@ namespace JudyArray_Test
             Assert.IsFalse(dic.TryGetValue("key2", out value));
             Assert.IsNull(value);
 
-            Assert.IsTrue(dic.RemoveKey("key1"));
+            Assert.IsTrue(dic.Remove("key1"));
 
             Assert.IsFalse(dic.TryGetValue("key1", out value));
             Assert.IsNull(value);
 
-            Assert.IsFalse(dic.RemoveKey("key1"));
+            Assert.IsFalse(dic.Remove("key1"));
 
             dic.Dispose();
         }
@@ -193,7 +193,7 @@ namespace JudyArray_Test
             Assert.AreSame(weakValue.Target, value);
             value = null;
 
-            dic.RemoveKey("key1");
+            dic.Remove("key1");
             GC.Collect();
             Assert.IsNull(weakValue.Target);
         }

@@ -116,7 +116,7 @@ public:
 		Set((PWord_t)valuePtr, value);
 	}
 
-	virtual bool RemoveKey(String^ key)
+	virtual bool Remove(String^ key)
 	{
 		KeyBytes keyBytes(key);
 		Pvoid_t judyArrayPtr = _judyArrayPtr;
@@ -173,7 +173,7 @@ generic<typename TValue>
 ref class ReferenceJudyHybridArray : public JudyHybridArray<TValue>
 {
 public:
-	virtual bool RemoveKey(String^ key) override
+	virtual bool Remove(String^ key) override
 	{
 		KeyBytes keyBytes(key);
 		Pvoid_t judyArrayPtr = _judyArrayPtr;
@@ -293,10 +293,10 @@ JudyStringDictionary<TValue>::~JudyStringDictionary()
 }
 
 generic<typename TValue>
-bool JudyStringDictionary<TValue>::RemoveKey(String^ key)
+bool JudyStringDictionary<TValue>::Remove(String^ key)
 {
 	if (key == nullptr) throw gcnew ArgumentNullException("key");
-	return _judyArray->RemoveKey(key);
+	return _judyArray->Remove(key);
 }
 
 generic<typename TValue>

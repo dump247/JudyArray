@@ -52,7 +52,7 @@ namespace JudyArray {
 		/// <param name="key">Key to remove.</param>
 		/// <returns>True if the key was found and removed.</returns>
 		/// <exception cref="System::ArgumentNullException">If <paramref name="key"/> is a null reference.</exception>
-		bool RemoveKey(System::String^ key);
+		bool Remove(System::String^ key);
 
 		/// <summary>
 		/// Try and get a value from the dictionary.
