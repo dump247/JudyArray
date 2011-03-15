@@ -24,8 +24,8 @@
 namespace JudyArray {
 
   /// <summary>
-	/// Judy bit array with 32-bit index.
-	/// </summary>
+  /// Judy bit array with 32-bit index.
+  /// </summary>
   /// <remarks>
   /// The bit array is unbounded, so any index between 0 and
   /// <see cref="System::UInt32::MaxValue"/> is valid.
@@ -49,22 +49,22 @@ namespace JudyArray {
   public:
 
     /// <summary>
-		/// Initialize a new instance with all bits clear.
-		/// </summary>
+    /// Initialize a new instance with all bits clear.
+    /// </summary>
     JudyBitArray32();
 
     virtual ~JudyBitArray32();
 
     /// <summary>
-		/// Set the bit at a specific position in the bit array.
-		/// </summary>
+    /// Set the bit at a specific position in the bit array.
+    /// </summary>
     /// <param name="index">Index of the bit to set.</param>
     /// <param name="value">The value to assign to the bit.</param>
     void Set(unsigned int index, bool value);
 
     /// <summary>
-		/// Set the bit at a specific position in the bit array.
-		/// </summary>
+    /// Set the bit at a specific position in the bit array.
+    /// </summary>
     /// <param name="index">Index of the bit to set.</param>
     /// <param name="value">The value to assign to the bit.</param>
     /// <exception cref="System::ArgumentOutOfRangeException">If <paramref name="index"/> is less than 0.</exception>
