@@ -52,10 +52,15 @@ namespace JudyArray_Test
         public void Enumerator__Errors()
         {
             JudyStringDictionary<int> dic = new JudyStringDictionary<int>();
+			dic["key"] = 17;
+			dic["key2"] = 18;
+
             IEnumerator<KeyValuePair<string, int>> dicEnum = dic.GetEnumerator();
 
             // MoveNext must be called
             Assert.Throws<InvalidOperationException>(() => { var x = dicEnum.Current; });
+
+			Assert.IsTrue(dicEnum.MoveNext());
 
             // Only one enumerator at a time allowed
             var dicEnum2 = dic.GetEnumerator();
