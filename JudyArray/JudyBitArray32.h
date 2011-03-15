@@ -71,6 +71,14 @@ namespace JudyArray {
     void Set(int index, bool value);
 
     /// <summary>
+    /// Set the bit at a specific position in the bit array.
+    /// </summary>
+    /// <param name="index">Index of the bit to set.</param>
+    /// <param name="value">The value to assign to the bit.</param>
+    /// <exception cref="System::ArgumentOutOfRangeException">If <paramref name="index"/> is less than 0 or greater than <see cref="System::UInt32::MaxValue"/>.</exception>
+    void Set(__int64 index, bool value);
+
+    /// <summary>
 		/// Get the value of the bit at a specific position in the bit array.
 		/// </summary>
     /// <param name="index">Index of the bit to get.</param>
@@ -84,6 +92,14 @@ namespace JudyArray {
     /// <returns>True if the bit is set.</returns>
     /// <exception cref="System::ArgumentOutOfRangeException">If <paramref name="index"/> is less than 0.</exception>
     bool Get(int index);
+
+    /// <summary>
+		/// Get the value of the bit at a specific position in the bit array.
+		/// </summary>
+    /// <param name="index">Index of the bit to get.</param>
+    /// <returns>True if the bit is set.</returns>
+    /// <exception cref="System::ArgumentOutOfRangeException">If <paramref name="index"/> is less than 0 or greater than <see cref="System::UInt32::MaxValue"/>.</exception>
+    bool Get(__int64 index);
 
     /// <summary>
     /// Get the number of set bits in the bit array.

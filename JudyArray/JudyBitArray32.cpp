@@ -69,6 +69,12 @@ void JudyBitArray32::Set(int index, bool value)
   Set((unsigned int)index, value);
 }
 
+void JudyBitArray32::Set(__int64 index, bool value)
+{
+  if (index < 0 || index > UInt32::MaxValue) throw gcnew ArgumentOutOfRangeException("index", index, String::Concat("Value must be between 0 and ",UInt32::MaxValue));
+  Set((unsigned int)index, value);
+}
+
 bool JudyBitArray32::Get(unsigned int index)
 {
   int rc;
@@ -85,12 +91,18 @@ bool JudyBitArray32::Get(int index)
   return Get((unsigned int)index);
 }
 
+bool JudyBitArray32::Get(__int64 index)
+{
+  if (index < 0 || index > UInt32::MaxValue) throw gcnew ArgumentOutOfRangeException("index", index, String::Concat("Value must be between 0 and ",UInt32::MaxValue));
+  return Get((unsigned int)index);
+}
+
 __int64 JudyBitArray32::Count::get()
 {
-  int rc;
+  Word_t rc;
   Pvoid_t judyArrayPtr = _judyArrayPtr;
   J1C(rc, judyArrayPtr, 0, -1);
-  return (unsigned int)rc;
+  return rc;
 }
 
 IEnumerator<__int64>^ JudyBitArray32::GetEnumerator()
