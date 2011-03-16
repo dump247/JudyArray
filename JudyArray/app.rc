@@ -13,13 +13,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -53,15 +51,15 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
- FILEFLAGSMASK 0x17L
+ FILEVERSION 1,2,0,1
+ PRODUCTVERSION 1,2,0,0
+ FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
 #else
  FILEFLAGS 0x0L
 #endif
- FILEOS 0x4L
+ FILEOS 0x40004L
  FILETYPE 0x2L
  FILESUBTYPE 0x0L
 BEGIN
@@ -69,13 +67,14 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "Managed JudyArray"
-            VALUE "FileVersion", "1, 0, 0, 1"
-            VALUE "InternalName", "JudyArray"
+            VALUE "CompanyName", "JudyArray"
+            VALUE "FileDescription", "Managed wrapper for Judy arrays."
+            VALUE "FileVersion", "1.2.0.1"
+            VALUE "InternalName", "JudyArray.dll"
             VALUE "LegalCopyright", "Copyright (C) 2011"
-            VALUE "OriginalFilename", "JudyArra.dll"
-            VALUE "ProductName", "Managed JudyArray"
-            VALUE "ProductVersion", "1, 0, 0, 1"
+            VALUE "OriginalFilename", "JudyArray.dll"
+            VALUE "ProductName", "JudyArray"
+            VALUE "ProductVersion", "1.2.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -84,7 +83,7 @@ BEGIN
     END
 END
 
-#endif    // English (U.S.) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
