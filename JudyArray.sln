@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JudyArray", "JudyArray\JudyArray.vcproj", "{29E93D09-B689-4EE4-9DB2-513A1B68DBEC}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JudyArray", "JudyArray\JudyArray.vcxproj", "{29E93D09-B689-4EE4-9DB2-513A1B68DBEC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JudyArray-Test", "JudyArray-Test\JudyArray-Test.csproj", "{67C2A1FD-544F-436D-AD4E-4F50EFDA7D96}"
 EndProject
