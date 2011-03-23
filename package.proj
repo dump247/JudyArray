@@ -1,0 +1,37 @@
+<Project DefaultTargets="Package"
+    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    
+	<PropertyGroup>
+		<Version>1.2.0.2</Version>
+	</PropertyGroup>
+	
+	<Target Name="Package">
+		<Exec Command="call &quot;C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat&quot; x86
+static_build.bat" WorkingDirectory="$(MSBuildProjectDirectory)\judy\src" />
+		<MSBuild Projects="$(MSBuildProjectDirectory)\JudyArray.sln" Properties="Configuration=Debug;Platform=Win32" />
+		<MSBuild Projects="$(MSBuildProjectDirectory)\JudyArray.sln" Properties="Configuration=Debug - v3.5;Platform=Win32" />
+		<MSBuild Projects="$(MSBuildProjectDirectory)\JudyArray.sln" Properties="Configuration=Release;Platform=Win32" />
+		<MSBuild Projects="$(MSBuildProjectDirectory)\JudyArray.sln" Properties="Configuration=Release - v3.5;Platform=Win32" />
+		
+		<Exec Command="call &quot;C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat&quot; x64
+static_build.bat" WorkingDirectory="$(MSBuildProjectDirectory)\judy\src" />
+		<MSBuild Projects="$(MSBuildProjectDirectory)\JudyArray.sln" Properties="Configuration=Debug;Platform=x64" />
+		<MSBuild Projects="$(MSBuildProjectDirectory)\JudyArray.sln" Properties="Configuration=Debug - v3.5;Platform=x64" />
+		<MSBuild Projects="$(MSBuildProjectDirectory)\JudyArray.sln" Properties="Configuration=Release;Platform=x64" />
+		<MSBuild Projects="$(MSBuildProjectDirectory)\JudyArray.sln" Properties="Configuration=Release - v3.5;Platform=x64" />
+	
+		<ItemGroup>
+			<ZipFiles Include="$(MSBuildProjectDirectory)\JudyArray\bin\*\*.dll" />
+			<ZipFiles Include="$(MSBuildProjectDirectory)\JudyArray\bin\*\*.xml" />
+			<ZipFiles Include="$(MSBuildProjectDirectory)\JudyArray\bin\*\*.pdb" />
+		</ItemGroup>
+	
+		<Zip Files="@(ZipFiles)"
+			 WorkingDirectory="$(MSBuildProjectDirectory)\JudyArray\bin"
+			 ZipFileName="$(MSBuildProjectDirectory)\JudyArray-$(Version)-judy1.0.5.zip"
+			 ZipLevel="9" />
+	</Target>
+	
+	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+	
+</Project>
