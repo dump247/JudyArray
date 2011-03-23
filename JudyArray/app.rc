@@ -51,7 +51,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,0,1
+ FILEVERSION 1,2,0,2
  PRODUCTVERSION 1,2,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -69,7 +69,7 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "JudyArray"
             VALUE "FileDescription", "Managed wrapper for Judy arrays."
-            VALUE "FileVersion", "1.2.0.1"
+            VALUE "FileVersion", "1.2.0.2"
             VALUE "InternalName", "JudyArray.dll"
             VALUE "LegalCopyright", "Copyright (C) 2011"
             VALUE "OriginalFilename", "JudyArray.dll"
